@@ -9,6 +9,12 @@ dependencies = [
     "click>=8.2.1",
     "fastapi>=0.116.1",
     "pydantic-settings>=2.10.1",
+    "langchain>=0.3.26",
+    "langchain_community>=0.3.27",
+    "ipykernel>=6.29.5",
+    "sentence_transformers>=5.0.0",
+    "faiss-cpu>=1.11.0.post1",
+    "uvicorn[standard]>=0.35.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -29,3 +35,4 @@ packages = ["src/research_assistant"]
 
 [tool.rye.scripts]
 cli = { cmd = "python -m src.cmd.cli"} 
+dev = { cmd = "python -m uvicorn src.cmd.main:app --loop uvloop --access-log --use-colors --reload"}
