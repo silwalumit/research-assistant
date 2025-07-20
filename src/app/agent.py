@@ -54,7 +54,7 @@ class ResearchAgent:
             )
             retrieved_docs = await retriever.ainvoke(query)
             logger.info(
-                f"Retrieved docs: {[(doc.metadata, doc.page_content[:50]) for doc in retrieved_docs]}"
+                f"Retrieved docs: {[doc.metadata['source'] for doc in retrieved_docs]}"
             )
 
             content = "\n\n".join(
@@ -72,7 +72,7 @@ class ResearchAgent:
             llm_with_tools = self.llm.bind_tools([retrieve])
             response = await llm_with_tools.ainvoke(state["messages"])
 
-            logger.info(f"Response from retriever tool: {response.text()}")
+            logger.info(f"Response from retriever tool: {response.text()[:10]}")
             return {"messages": [response]}
 
         async def generate(state: MessagesState) -> dict[str, list[BaseMessage]]:
@@ -86,7 +86,7 @@ class ResearchAgent:
                     break
 
             last_retrieved_docs = recent_retrieved_docs[::-1]
-            logger.info(f"Last doc retrieved: {last_retrieved_docs}")
+            logger.info(f"Last doc retrieved: {last_retrieved_docs[:50]}")
 
             docs_content = "\n\n".join(doc.content for doc in last_retrieved_docs)
 

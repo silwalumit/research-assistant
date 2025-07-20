@@ -1,7 +1,7 @@
 [project]
 name = "research-assistant"
 version = "0.1.0"
-description = "Add your description here"
+description = "This project implements a mini Agentic RAG"
 authors = [
     { name = "Umit Silwal Khatri", email = "silwalumit@gmail.com" }
 ]
