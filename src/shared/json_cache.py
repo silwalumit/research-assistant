@@ -1,7 +1,7 @@
 import json
 import pathlib
 
-from src.domain.interfaces import Cache
+from src.app.interfaces import Cache
 
 
 class JsonCache(Cache):

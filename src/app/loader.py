@@ -8,9 +8,9 @@ from typing import Type
 from langchain_community.document_loaders import TextLoader
 from langchain_core.documents import Document
 
-from src.domain.interfaces import ILoader
+from src.app.interfaces import ILoader
 
-logger = getLogger(__name__)
+logger = getLogger()
 
 
 class DocumentLoader(ILoader):
@@ -47,6 +47,7 @@ class DocumentLoader(ILoader):
                 yield from self._lazy_load_file(path)
 
     def _lazy_load_file(self, path: pathlib.Path) -> Iterator[Document]:
+        logger.info(f"Load document {str(path)}")
         loader = self.loader_cls(path, encoding="utf-8", autodetect_encoding=True)
         for subdoc in loader.lazy_load():
             yield subdoc

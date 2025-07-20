@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, Iterator, List, Protocol
+from typing import Iterable, Iterator, Protocol
 
 from langchain_core.documents import Document
 
@@ -10,7 +10,9 @@ class ILoader(ABC):
 
 
 class DocumentSplitter(Protocol):
-    def split_documents(self, documents: Iterable[Document]) -> List[Document]: ...
+    def lazy_split_documents(
+        self, documents: Iterable[Document]
+    ) -> Iterator[Document]: ...
 
 
 class VectorStore(Protocol):

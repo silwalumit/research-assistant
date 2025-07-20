@@ -1,13 +1,17 @@
 import pathlib
+import time
+from logging import getLogger
 
 import click
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 
 from src.app.ingestor import ingest_documents
-from src.infrastructure.json_cache import JsonCache
-from src.infrastructure.loader import DocumentLoader
-from src.infrastructure.splitter import RecursiveTextSplitterWithHash
+from src.app.loader import DocumentLoader
+from src.app.splitter import RecursiveTextSplitterWithHash
+from src.shared.json_cache import JsonCache
+
+logger = getLogger()
 
 
 @click.group()
@@ -40,7 +44,8 @@ def ingest(
     chunk_overlap: int,
     persist_dir: str,
 ):
-    click.echo(f"Running ingestion pipeline, {paths=}")
+    start_time = time.perf_counter()
+    logger.info(f"Running ingestion pipeline, {paths=}")
     embedder = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     doc_ids = ingest_documents(
         loader=DocumentLoader(
@@ -63,4 +68,7 @@ def ingest(
         ),
         cache=JsonCache(),
     )
-    click.echo(f"Document processed: {len(doc_ids)}")
+    logger.info(f"Total chunks processed: {len(doc_ids)}")
+    logger.info(
+        f"Total time taken to ingest: {(time.perf_counter() - start_time)} seconds"
+    )
