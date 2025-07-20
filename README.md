@@ -136,7 +136,8 @@ ollama list
 - Use smaller embedding model
 - Limit max retrieved documents
 
-
+## Video Link
+[Demo](https://drive.google.com/file/d/18gX5-gzu1phkgAn-H42666kTEWQ5DwDm/view?usp=share_link)
 ## Acknowledgments
 
 - Built with LangChain and LangGraph
