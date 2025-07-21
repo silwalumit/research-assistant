@@ -9,15 +9,27 @@ services:
       - ollama_data:/root/.ollama
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 1m
     restart: unless-stopped
     entrypoint: >
       /bin/sh -c "
-      ollama server &&
-      ollama pull mistral &&
-      tail -f /dev/null 
-      "
-    
+        echo 'Starting Ollama server...' &&
+        ollama serve &
 
+        echo 'Waiting for Ollama to become healthy...'
+        until curl -sf http://localhost:11434/api/tags; do
+          sleep 2
+        done
+
+        # echo 'Pulling mistral model...'
+        # ollama pull mistral
+
+        echo 'Ollama is ready.'
+        tail -f /dev/null
+      "
 
   # Research Assistant API
   research-assistant:
@@ -28,6 +40,10 @@ services:
     depends_on:
       ollama:
         condition: service_healthy
+    restart: unless-stopped
+    env_file:
+      - .env
+
 
 volumes:
   ollama_data:
@@ -35,6 +51,3 @@ volumes:
 networks:
   default:
     name: rag-network
-
-
-

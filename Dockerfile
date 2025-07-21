@@ -17,9 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY src/ ./src/
-COPY data/ ./data/
+RUN mkdir -p data/chroma
 COPY docs/ ./docs/
-COPY .env .
+
 
 # Expose port
 EXPOSE 8000
